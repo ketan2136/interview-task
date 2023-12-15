@@ -10,7 +10,6 @@ function EditDelete(props) {
 
 
     useEffect(() => {
-        // localStorage.setItem('newVal', JSON.stringify(newVal));
         const fromLocal = JSON.parse(localStorage.getItem('newVal'))
         console.log(fromLocal)
         if (fromLocal) {
