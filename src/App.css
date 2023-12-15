@@ -22,6 +22,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+
 }
 
 .App-link {
@@ -32,7 +33,58 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+
+.main {
+  width: 250px;
+  /* height: 250px; */
+  margin: 20px auto 0;
+  background-color: #00FFFF;
+  padding: 20px;
+  border-radius: 5px;
+  background-image: radial-gradient(circle 311px at 8.6% 27.9%, rgba(62, 147, 252, 0.57) 12.9%, rgba(239, 183, 192, 0.44) 91.2%);
+}
+
+label {
+  display: block;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+body {
+  background-color: rgb(228, 221, 221);
+}
+
+.main label h1 {
+  color: black;
+}
+
+.main input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px solid black;
+  color: black;
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
+
+.addButton {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #FFFF;
+}
+
+.main button:hover {
+  box-shadow: rgba(253, 76, 0, 0.5) 0 3px 8px;
+}
+
+.editDeletButton button {
+ 
+  font-size: 16px;
+  margin-right: 10px;
 }
