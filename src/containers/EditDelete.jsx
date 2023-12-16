@@ -8,6 +8,9 @@ function EditDelete(props) {
     const [newVal, setNewVal] = useState([]);
     const [editIndex, setEditIndex] = useState(null);
 
+    const [data, setData] = useState(newVal)
+    const [filter, setFilter] = useState('all')
+
 
     useEffect(() => {
         const fromLocal = JSON.parse(localStorage.getItem('newVal'))
@@ -17,6 +20,7 @@ function EditDelete(props) {
         } else {
             localStorage.setItem('newVal', '[]')
         }
+        setData(JSON.parse(localStorage.getItem('newVal')))
     }, []);
 
 
@@ -33,7 +37,7 @@ function EditDelete(props) {
                 setEditIndex(null)
             } else {
                 const tempArr = [...newVal]
-                tempArr.push({ value: values, status :false })
+                tempArr.push({ value: values, status: false })
                 setNewVal(tempArr)
                 // setnext(prvId => prvId + 1);
                 localStorage.setItem('newVal', JSON.stringify(tempArr))
@@ -65,9 +69,9 @@ function EditDelete(props) {
         localStorage.setItem('newVal', JSON.stringify(remove))
     }
 
-    const handleCheckChange = (e,i) => {
+    const handleCheckChange = (e, i) => {
         const tempArr = [...newVal]
-        tempArr[i]  = {
+        tempArr[i] = {
             ...tempArr[i],
             status: e.target.checked
         }
@@ -75,10 +79,30 @@ function EditDelete(props) {
 
         setNewVal(tempArr)
 
-                localStorage.setItem('newVal', JSON.stringify(tempArr))
-
+        localStorage.setItem('newVal', JSON.stringify(tempArr))
     }
 
+
+    const handleFilterChange = (selectedFilter) => {
+        setFilter(selectedFilter);
+        filterData(selectedFilter);
+      };
+    
+      const filterData = (selectedFilter) => {
+        switch (selectedFilter) {
+          case 'all':
+            setData(newVal);
+            break;
+          case 'done':
+            setData(newVal.filter(item => item.status === true));
+            break;
+          case 'pending':
+            setData(newVal.filter(item => item.status === false));
+            break;
+          default:
+            setData(newVal);
+        }
+      };
 
 
     return (
@@ -90,16 +114,21 @@ function EditDelete(props) {
                     <button type='submit' className='addButton' >{editIndex !== null ? 'update' : 'add'}</button>
                 </form>
                 <div>
+                    <select value={filter} onChange={(e) => handleFilterChange(e.target.value)}>
+                        <option value="all">All</option>
+                        <option value="done">Done</option>
+                        <option value="pending">Pending</option>
+                    </select>
                     {
-                        newVal.map((val, index) => {
+                        data.map((val, index) => {
                             return (
                                 <div key={`task-${index}`} style={{
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'space-between'
                                 }}>
-                                    <input type='checkbox' checked={val.status} onChange={e=>handleCheckChange(e,index)} />
-                                    <p style={{ display: 'inline-block', marginRight: '10px', color:'black' }}>{val.value}</p>
+                                    <input type='checkbox' checked={val.status} onChange={e => handleCheckChange(e, index)} />
+                                    <p style={{ display: 'inline-block', marginRight: '10px', color: 'black' }}>{val.value}</p>
                                     <div className='editDeletButton'>
                                         <button onClick={() => handleEdit(index)}><FaEdit /></button>
                                         <button onClick={() => handleDelete(index)}>< MdDelete /></button>
