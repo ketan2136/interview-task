@@ -5,6 +5,7 @@ import { MdDelete } from "react-icons/md";
 function EditDelete(props) {
 
     const [values, setValues] = useState('');
+    console.log(values);
     const [newVal, setNewVal] = useState([]);
     const [editIndex, setEditIndex] = useState(null);
 
@@ -32,13 +33,20 @@ function EditDelete(props) {
                 const updateArt = [...newVal];
                 updateArt[editIndex] = { ...updateArt[editIndex], value: values };
                 setNewVal(updateArt);
+                setData(updateArt);
+                setFilter('all')
 
                 localStorage.setItem('newVal', JSON.stringify(updateArt))
                 setEditIndex(null)
             } else {
                 const tempArr = [...newVal]
-                tempArr.push({ value: values, status: false })
+                console.log(tempArr);
+                tempArr.push({ id: Date.now(), value: values, status: false });
+               
                 setNewVal(tempArr)
+                setData(tempArr)
+                setFilter('all')
+
                 // setnext(prvId => prvId + 1);
                 localStorage.setItem('newVal', JSON.stringify(tempArr))
             }
@@ -54,18 +62,24 @@ function EditDelete(props) {
 
 
 
+    function handleEdit(id) {
+        console.log(id);
 
-
-    function handleEdit(index) {
-        console.log(index);
-        setValues(newVal[index].value)
+        const index = newVal.findIndex(task => task.id === id);
+        const editedTask = newVal[index].value;
+        setValues(editedTask);
         setEditIndex(index);
+
+        // console.log();
+       
     }
 
     function handleDelete(index) {
         const remove = [...newVal]
         remove.splice(index, 1)
         setNewVal(remove);
+        setData(remove)
+        setFilter('all')
         localStorage.setItem('newVal', JSON.stringify(remove))
     }
 
@@ -78,6 +92,8 @@ function EditDelete(props) {
         console.log(tempArr)
 
         setNewVal(tempArr)
+        setData(tempArr)
+        setFilter('all')
 
         localStorage.setItem('newVal', JSON.stringify(tempArr))
     }
@@ -86,23 +102,23 @@ function EditDelete(props) {
     const handleFilterChange = (selectedFilter) => {
         setFilter(selectedFilter);
         filterData(selectedFilter);
-      };
-    
-      const filterData = (selectedFilter) => {
+    };
+
+    const filterData = (selectedFilter) => {
         switch (selectedFilter) {
-          case 'all':
-            setData(newVal);
-            break;
-          case 'done':
-            setData(newVal.filter(item => item.status === true));
-            break;
-          case 'pending':
-            setData(newVal.filter(item => item.status === false));
-            break;
-          default:
-            setData(newVal);
+            case 'all':
+                setData(newVal);
+                break;
+            case 'done':
+                setData(newVal.filter(item => item.status === true));
+                break;
+            case 'pending':
+                setData(newVal.filter(item => item.status === false));
+                break;
+            default:
+                setData(newVal);
         }
-      };
+    };
 
 
     return (
@@ -130,7 +146,7 @@ function EditDelete(props) {
                                     <input type='checkbox' checked={val.status} onChange={e => handleCheckChange(e, index)} />
                                     <p style={{ display: 'inline-block', marginRight: '10px', color: 'black' }}>{val.value}</p>
                                     <div className='editDeletButton'>
-                                        <button onClick={() => handleEdit(index)}><FaEdit /></button>
+                                        <button onClick={() => handleEdit(val.id)}><FaEdit /></button>
                                         <button onClick={() => handleDelete(index)}>< MdDelete /></button>
                                     </div>
                                 </div>
